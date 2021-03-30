@@ -4,7 +4,7 @@
 ## Basic Usage
 
 ```ts
-import * as bot from 'bot-proxy';
+import * as bot from 'bot_proxy';
 
 bot.login('myPublicKey', 'myBotToken').then((client) => {
   bot.onMessage((message) => {
@@ -18,7 +18,7 @@ bot.login('myPublicKey', 'myBotToken').then((client) => {
 I recommend using [slash-commands](https://www.npmjs.com/package/slash-commands) to build your command objects.
 
 ```typescript
-import * as bot from 'bot-proxy';
+import * as bot from 'bot_proxy';
 import * as slash from 'slash-commands';
 
 bot.login('myPublicKey', 'myBotToken').then((client) => {
