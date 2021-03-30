@@ -1,2 +1,2 @@
-# discord.ts
- Simple proxy to live between your bot and discord.js
+# bot_proxy
+ middleware to make simple discord bots a tiny bit simpler

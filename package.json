@@ -1,7 +1,7 @@
 {
-  "name": "discord.ts",
+  "name": "bot_proxy",
   "version": "0.1.0",
-  "description": "",
+  "description": "middleware to make simple discord bots a tiny bit simpler",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
