@@ -12,7 +12,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^12.5.1"
+    "discord.js": "^12.5.1",
+    "slash-commands": "^1.4.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2",
