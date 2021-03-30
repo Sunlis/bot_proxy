@@ -1,0 +1,38 @@
+import * as Discord from 'discord.js';
+import * as di from 'slash-commands';
+export declare const login: (key: string, token?: string | undefined, autoRetry?: boolean) => Promise<Discord.Client>;
+declare type MessageHandler = (message: Discord.Message) => void;
+export declare const onMessage: (handler: MessageHandler) => void;
+declare type ReactionHandler = (reaction: Discord.MessageReaction, user: Discord.User | Discord.PartialUser) => void;
+export declare const onReact: (handler: ReactionHandler) => void;
+export declare const createCommand: (command: di.PartialApplicationCommand, guildId?: string | undefined) => Promise<void | di.ApplicationCommand>;
+export declare const removeCommand: (commandId: string, guildId?: string | undefined) => Promise<boolean>;
+export declare const removeAllCommands: (guildId?: string | undefined) => Promise<boolean[]>;
+export declare type InteractionUser = di.User & di.GuildMember;
+export declare class Responder {
+    private interaction;
+    private user;
+    private nickname;
+    private client;
+    private hasPostedOriginal;
+    private lastFollowup?;
+    constructor(interaction: di.Interaction, client: Discord.Client);
+    getInteraction(): di.Interaction;
+    getUser(): di.User;
+    getUserId(): string;
+    getNick(): string;
+    private getProp;
+    getChannelId(): any;
+    getGuildId(): any;
+    getResolvedUser(userId: string): InteractionUser | null;
+    getUserNick(user: InteractionUser): string;
+    ack(type?: number): any;
+    reply(content: string): Promise<Discord.Message>;
+    sendOriginal(content: string, embeds?: Discord.MessageEmbed[], type?: di.InteractionResponseType): Promise<Discord.Message>;
+    editOriginal(content: string, embeds?: Discord.MessageEmbed[]): Promise<Discord.Message>;
+    sendFollowup(content: string, embeds?: Discord.MessageEmbed[]): Promise<Discord.Message>;
+    editFollowup(followup: Discord.Message, content: string, embeds?: Discord.MessageEmbed[]): Promise<Discord.Message>;
+}
+export declare type InteractionHandler = (interaction: di.Interaction, responder: Responder) => void;
+export declare const onInteraction: (handler: InteractionHandler) => void;
+export {};
