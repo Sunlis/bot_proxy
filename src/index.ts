@@ -132,6 +132,11 @@ export const removeAllCommands = async (guildId?: string) => {
   });
 };
 
+export const getCommands = async (guildId?: string) => {
+  const interactions = await getInteractions();
+  return interactions.getApplicationCommands(guildId);
+};
+
 export type InteractionUser = di.User & di.GuildMember;
 
 export class Responder {
