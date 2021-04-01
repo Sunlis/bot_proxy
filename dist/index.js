@@ -1,6 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.onInteraction = exports.Responder = exports.removeAllCommands = exports.removeCommand = exports.createCommand = exports.onReact = exports.onMessage = exports.login = void 0;
+exports.onInteraction = exports.Responder = exports.getCommands = exports.removeAllCommands = exports.removeCommand = exports.createCommand = exports.onReact = exports.onMessage = exports.login = void 0;
 const Discord = require("discord.js");
 const di = require("slash-commands");
 let clientToken;
@@ -106,6 +106,10 @@ exports.removeAllCommands = async (guildId) => {
             return exports.removeCommand(command.id, command.guild_id);
         }));
     });
+};
+exports.getCommands = async (guildId) => {
+    const interactions = await getInteractions();
+    return interactions.getApplicationCommands(guildId);
 };
 class Responder {
     constructor(interaction, client) {

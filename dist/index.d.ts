@@ -8,6 +8,7 @@ export declare const onReact: (handler: ReactionHandler) => void;
 export declare const createCommand: (command: di.PartialApplicationCommand, guildId?: string | undefined) => Promise<void | di.ApplicationCommand>;
 export declare const removeCommand: (commandId: string, guildId?: string | undefined) => Promise<boolean>;
 export declare const removeAllCommands: (guildId?: string | undefined) => Promise<boolean[]>;
+export declare const getCommands: (guildId?: string | undefined) => Promise<di.ApplicationCommand[]>;
 export declare type InteractionUser = di.User & di.GuildMember;
 export declare class Responder {
     private interaction;
