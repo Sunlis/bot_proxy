@@ -146,8 +146,8 @@ export class Responder {
   constructor(interaction: di.Interaction, client: Discord.Client) {
     this.interaction = interaction;
     this.client = client;
-    this.user = interaction.member.user;
-    this.nickname = interaction.member.nick || this.user.username;
+    this.user = interaction.member?.user || (interaction as any).user;
+    this.nickname = interaction.member?.nick || this.user?.username;
   }
 
   getInteraction() {
@@ -290,8 +290,12 @@ export const onInteraction = (handler: InteractionHandler) => {
   interactionHandlers.push(handler);
 };
 client.ws.on('INTERACTION_CREATE' as Discord.WSEventType, (interaction) => {
-  const responder = new Responder(interaction, client);
-  interactionHandlers.forEach((handler) => {
-    const response = handler(interaction, responder);
-  });
+  try {
+    const responder = new Responder(interaction, client);
+    interactionHandlers.forEach((handler) => {
+      const response = handler(interaction, responder);
+    });
+  } catch (e) {
+    console.error('Error while trying to run interaction handlers', e);
+  }
 });
