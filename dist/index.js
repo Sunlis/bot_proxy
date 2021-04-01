@@ -35,8 +35,9 @@ const doLogin = () => {
     if ((_a = client.uptime) !== null && _a !== void 0 ? _a : 0 > 0) {
         return Promise.resolve(client);
     }
-    return (new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         client.on('ready', () => {
+            getInteractions();
             resolve(client);
         });
         client.on('error', (err) => {
@@ -45,8 +46,6 @@ const doLogin = () => {
         client.login(clientToken).catch((err) => {
             reject(err);
         });
-    })).then((client) => {
-        return setupCommands(client);
     });
 };
 const messageHandlers = [];
@@ -69,32 +68,39 @@ client.on('messageReactionAdd', (reaction, user) => {
         handler(reaction, user);
     });
 });
-let interactions = new di.DiscordInteractions({
-    applicationId: '',
-    authToken: '',
-    publicKey: '',
-});
+let interactions = null;
+const getInteractions = () => {
+    if (interactions) {
+        return Promise.resolve(interactions);
+    }
+    return setupCommands(client).then((int) => {
+        interactions = int;
+        return int;
+    });
+};
 const setupCommands = (client) => {
     return client.fetchApplication().then((app) => {
-        interactions = new di.DiscordInteractions({
+        return new di.DiscordInteractions({
             applicationId: app.id,
             authToken: clientToken,
             publicKey: clientKey,
         });
-        return client;
     });
 };
-exports.createCommand = (command, guildId) => {
+exports.createCommand = async (command, guildId) => {
+    const interactions = await getInteractions();
     return interactions
         .createApplicationCommand(command, guildId)
         .catch((err) => {
         console.error('error creating command', err);
     });
 };
-exports.removeCommand = (commandId, guildId) => {
+exports.removeCommand = async (commandId, guildId) => {
+    const interactions = await getInteractions();
     return interactions.deleteApplicationCommand(commandId, guildId);
 };
-exports.removeAllCommands = (guildId) => {
+exports.removeAllCommands = async (guildId) => {
+    const interactions = await getInteractions();
     return interactions.getApplicationCommands(guildId).then((commands) => {
         return Promise.all(commands.map((command) => {
             return exports.removeCommand(command.id, command.guild_id);
@@ -103,11 +109,12 @@ exports.removeAllCommands = (guildId) => {
 };
 class Responder {
     constructor(interaction, client) {
+        var _a, _b, _c;
         this.hasPostedOriginal = false;
         this.interaction = interaction;
         this.client = client;
-        this.user = interaction.member.user;
-        this.nickname = interaction.member.nick || this.user.username;
+        this.user = ((_a = interaction.member) === null || _a === void 0 ? void 0 : _a.user) || interaction.user;
+        this.nickname = ((_b = interaction.member) === null || _b === void 0 ? void 0 : _b.nick) || ((_c = this.user) === null || _c === void 0 ? void 0 : _c.username);
     }
     getInteraction() {
         return this.interaction;
@@ -234,9 +241,14 @@ exports.onInteraction = (handler) => {
     interactionHandlers.push(handler);
 };
 client.ws.on('INTERACTION_CREATE', (interaction) => {
-    const responder = new Responder(interaction, client);
-    interactionHandlers.forEach((handler) => {
-        const response = handler(interaction, responder);
-    });
+    try {
+        const responder = new Responder(interaction, client);
+        interactionHandlers.forEach((handler) => {
+            const response = handler(interaction, responder);
+        });
+    }
+    catch (e) {
+        console.error('Error while trying to run interaction handlers', e);
+    }
 });
 //# sourceMappingURL=index.js.map
