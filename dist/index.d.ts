@@ -5,7 +5,7 @@ declare type MessageHandler = (message: Discord.Message) => void;
 export declare const onMessage: (handler: MessageHandler) => void;
 declare type ReactionHandler = (reaction: Discord.MessageReaction, user: Discord.User | Discord.PartialUser) => void;
 export declare const onReact: (handler: ReactionHandler) => void;
-export declare const createCommand: (command: di.PartialApplicationCommand, guildId?: string | undefined) => Promise<void | di.ApplicationCommand>;
+export declare const createCommand: (command: di.PartialApplicationCommand, guildId?: string | undefined) => Promise<di.ApplicationCommand>;
 export declare const removeCommand: (commandId: string, guildId?: string | undefined) => Promise<boolean>;
 export declare const removeAllCommands: (guildId?: string | undefined) => Promise<boolean[]>;
 export declare const getCommands: (guildId?: string | undefined) => Promise<di.ApplicationCommand[]>;

@@ -110,12 +110,9 @@ const setupCommands = (client: Discord.Client): Promise<di.DiscordInteractions> 
 };
 
 export const createCommand = async (command: di.PartialApplicationCommand, guildId?: string) => {
-  const interactions = await getInteractions();
-  return interactions
-    .createApplicationCommand(command, guildId)
-    .catch((err: any) => {
-      console.error('error creating command', err);
-    });
+  return getInteractions().then((interactions) => {
+    return interactions.createApplicationCommand(command, guildId);
+  });
 };
 
 export const removeCommand = async (commandId: string, guildId?: string) => {

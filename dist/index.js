@@ -88,11 +88,8 @@ const setupCommands = (client) => {
     });
 };
 exports.createCommand = async (command, guildId) => {
-    const interactions = await getInteractions();
-    return interactions
-        .createApplicationCommand(command, guildId)
-        .catch((err) => {
-        console.error('error creating command', err);
+    return getInteractions().then((interactions) => {
+        return interactions.createApplicationCommand(command, guildId);
     });
 };
 exports.removeCommand = async (commandId, guildId) => {
