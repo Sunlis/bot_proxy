@@ -109,9 +109,24 @@ const setupCommands = (client: Discord.Client): Promise<di.DiscordInteractions> 
   });
 };
 
-export const createCommand = async (command: di.PartialApplicationCommand, guildId?: string) => {
+class CommandCreationError extends Error {
+  message: string;
+  obj: any;
+  constructor(msg: string, err: any) {
+    super(msg);
+    this.message = msg;
+    this.obj = err;
+  }
+}
+
+export const createCommand = (command: di.PartialApplicationCommand, guildId?: string) => {
   return getInteractions().then((interactions) => {
-    return interactions.createApplicationCommand(command, guildId);
+    return interactions.createApplicationCommand(command, guildId).then((resp: any) => {
+      if (resp.errors) {
+        throw new CommandCreationError(`Unable to create command`, resp.errors);
+      }
+      return resp as di.ApplicationCommand;
+    });
   });
 };
 

@@ -87,9 +87,21 @@ const setupCommands = (client) => {
         });
     });
 };
-exports.createCommand = async (command, guildId) => {
+class CommandCreationError extends Error {
+    constructor(msg, err) {
+        super(msg);
+        this.message = msg;
+        this.obj = err;
+    }
+}
+exports.createCommand = (command, guildId) => {
     return getInteractions().then((interactions) => {
-        return interactions.createApplicationCommand(command, guildId);
+        return interactions.createApplicationCommand(command, guildId).then((resp) => {
+            if (resp.errors) {
+                throw new CommandCreationError(`Unable to create command`, resp.errors);
+            }
+            return resp;
+        });
     });
 };
 exports.removeCommand = async (commandId, guildId) => {
