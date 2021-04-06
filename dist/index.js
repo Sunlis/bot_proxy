@@ -152,6 +152,11 @@ class Responder {
     getChannelId() {
         return this.getProp('channel_id', 'channelId');
     }
+    getChannel() {
+        return this.client.channels.fetch(this.getChannelId()).then((channel) => {
+            return channel;
+        });
+    }
     getGuildId() {
         return this.getProp('guild_id', 'guildId');
     }

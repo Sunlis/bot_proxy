@@ -196,6 +196,12 @@ export class Responder {
     return this.getProp('channel_id', 'channelId');
   }
 
+  getChannel(): Promise<Discord.TextChannel> {
+    return this.client.channels.fetch(this.getChannelId()).then((channel) => {
+      return channel as Discord.TextChannel;
+    });
+  }
+
   getGuildId() {
     return this.getProp('guild_id', 'guildId');
   }

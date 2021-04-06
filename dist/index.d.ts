@@ -24,6 +24,7 @@ export declare class Responder {
     getNick(): string;
     private getProp;
     getChannelId(): any;
+    getChannel(): Promise<Discord.TextChannel>;
     getGuildId(): any;
     getResolvedUser(userId: string): InteractionUser | null;
     getUserNick(user: InteractionUser): string;
